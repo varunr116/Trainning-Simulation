@@ -1,0 +1,114 @@
+using UnityEngine;
+
+[RequireComponent(typeof(CharacterController))]
+public class FirstPersonController : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float walkSpeed = 3f;
+    public float mouseSensitivity = 2f;
+    public float upDownRange = 80f;
+
+    [Header("References")]
+    public Camera playerCamera;
+    
+    private CharacterController characterController;
+    private float verticalRotation = 0;
+    private Vector3 moveDirection;
+    
+    // Lock cursor on start
+    private bool cursorLocked = true;
+
+    void Start()
+    {
+        characterController = GetComponent<CharacterController>();
+        
+        // Lock cursor to center of screen
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        // If no camera assigned, use main camera
+        if (playerCamera == null)
+            playerCamera = Camera.main;
+    }
+
+    void Update()
+    {
+        HandleMouseLook();
+        HandleMovement();
+        HandleCursorToggle();
+    }
+
+    void HandleMouseLook()
+    {
+        if (!cursorLocked) return;
+
+        // Get mouse input
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        // Rotate player horizontally
+        transform.Rotate(0, mouseX, 0);
+
+        // Rotate camera vertically
+        verticalRotation -= mouseY;
+        verticalRotation = Mathf.Clamp(verticalRotation, -upDownRange, upDownRange);
+        playerCamera.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+    }
+
+    void HandleMovement()
+    {
+        // Get WASD input
+        float horizontal = Input.GetAxis("Horizontal"); // A/D
+        float vertical = Input.GetAxis("Vertical");     // W/S
+
+        // Calculate movement direction relative to player rotation
+        Vector3 forward = transform.forward * vertical;
+        Vector3 right = transform.right * horizontal;
+        
+        moveDirection = (forward + right).normalized * walkSpeed;
+
+        // Apply basic gravity
+        if (!characterController.isGrounded)
+        {
+            moveDirection.y -= 9.81f * Time.deltaTime;
+        }
+        else
+        {
+            moveDirection.y = -1f; // Keep grounded
+        }
+
+        // Move the character
+        characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    void HandleCursorToggle()
+    {
+        // Press ESC to toggle cursor lock (useful for testing)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleCursorLock();
+        }
+    }
+
+    public void ToggleCursorLock()
+    {
+        cursorLocked = !cursorLocked;
+        
+        if (cursorLocked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+    // Public method to enable/disable movement (useful for UI interactions)
+    public void SetMovementEnabled(bool enabled)
+    {
+        this.enabled = enabled;
+    }
+}
