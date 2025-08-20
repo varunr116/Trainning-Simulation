@@ -50,27 +50,27 @@ public class GameController : MonoBehaviour
         }
     }
     
-    void InitializeScene1()
+   void InitializeScene1()
+{
+    Debug.Log("Initializing Scene 1: Classroom");
+    
+    // Set UI
+    UIManager.Instance.SetSceneLabel("Scene 1: Safety Briefing");
+    UIManager.Instance.ShowTimer(false);
+    
+    // Setup items for inspection
+    SetupScene1Items();
+    
+    // Start projector presentation
+    StartProjectorPresentation();
+    
+    // Show checklist
+    ChecklistUI checklistUI = FindObjectOfType<ChecklistUI>();
+    if (checklistUI != null)
     {
-        Debug.Log("Initializing Scene 1: Classroom");
-        
-        // Set UI
-        UIManager.Instance.SetSceneLabel("Scene 1: Safety Briefing");
-        UIManager.Instance.ShowTimer(false);
-        
-        // Setup items for inspection
-        SetupScene1Items();
-        
-        // Play welcome audio
-        AudioManager.Instance.PlayNarration(GetWelcomeAudio());
-        
-        // Show checklist
-        ChecklistUI checklistUI = FindObjectOfType<ChecklistUI>();
-        if (checklistUI != null)
-        {
-            checklistUI.ShowChecklist(true);
-        }
+        checklistUI.ShowChecklist(true);
     }
+}
     
     void InitializeScene2()
     {
@@ -93,6 +93,28 @@ public class GameController : MonoBehaviour
         // Play warehouse intro audio
         AudioManager.Instance.PlayNarration(GetWarehouseIntroAudio());
     }
+    void StartProjectorPresentation()
+{
+    VideoProjectorController projector = FindObjectOfType<VideoProjectorController>();
+    if (projector != null)
+    {
+        // Start welcome audio first, then projector
+        AudioManager.Instance.PlayNarration(GetWelcomeAudio());
+        
+        // Start projector after welcome audio (delay)
+        Invoke("StartProjectorVideo", 3f);
+    }
+}
+
+void StartProjectorVideo()
+{
+    VideoProjectorController projector = FindObjectOfType<VideoProjectorController>();
+    if (projector != null)
+    {
+        projector.PlayVideo();
+        Debug.Log("Projector presentation started");
+    }
+}
     
     void SetupScene1Items()
     {
