@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 168659767bb37463fb7346217a73961d, type: 3}
+  m_Name: Scene2AudioData
+  m_EditorClassIdentifier: 
+  welcomeToWarehouse: {fileID: 8300000, guid: 3fb2323be16bd40ea9033142c5cc5af0, type: 3}
+  generalInstructions: {fileID: 8300000, guid: 394c42f13ee264169894ca69d55cf13f, type: 3}
+  pickupTapeGun: {fileID: 8300000, guid: da82552708f954c2b909eba5d4bcf7ba, type: 3}
+  pickupBarcodeScanner: {fileID: 8300000, guid: e7a56845e69e44f4287c5dc78eb46a2d, type: 3}
+  pickupSafetyGloves: {fileID: 8300000, guid: 9547cad61a4b44e959932d95f86a5d01, type: 3}
+  pickupSafetyGoggles: {fileID: 8300000, guid: 00201a970863a4ffbb16304ffd7340cd, type: 3}
+  pickupGeneric: {fileID: 8300000, guid: da82552708f954c2b909eba5d4bcf7ba, type: 3}
+  dropTapeGun: {fileID: 8300000, guid: 3449c9f55cf2343089023e47d92b3963, type: 3}
+  dropBarcodeScanner: {fileID: 8300000, guid: bab6e947c791e4a4eba5e92e21cffa8d, type: 3}
+  dropSafetyGloves: {fileID: 8300000, guid: 1d8660e06505c47609ab9946d57bcfb0, type: 3}
+  dropSafetyGoggles: {fileID: 8300000, guid: cff35fb3ccb384ee79a556b7d1927325, type: 3}
+  dropGeneric: {fileID: 0}
+  firstItemCollected: {fileID: 8300000, guid: 68b5d2937a69849238cd4c0420950e87, type: 3}
+  halfwayComplete: {fileID: 8300000, guid: 0404df10af0c54ea3b4002d3fa89378b, type: 3}
+  almostFinished: {fileID: 0}
+  allItemsCollected: {fileID: 8300000, guid: 22279923653b143acbe23f843f86c9be, type: 3}
+  twoMinutesRemaining: {fileID: 8300000, guid: 3109766c3f8af4ec08ace29a0820087b, type: 3}
+  thirtySecondsRemaining: {fileID: 8300000, guid: ef54aac786ac04d1290e58fa8337fd47, type: 3}
+  timeUp: {fileID: 0}

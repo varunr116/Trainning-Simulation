@@ -28,7 +28,7 @@ public class ItemSpawner : MonoBehaviour
         
         if (spawnPoints.Count < itemPrefabs.Count)
         {
-            Debug.LogWarning("Not enough spawn points for all items!");
+           
             return;
         }
         
@@ -53,7 +53,7 @@ public class ItemSpawner : MonoBehaviour
                 
                 spawnedItems.Add(spawnedItem);
                 
-                Debug.Log($"Spawned {itemPrefabs[i].name} at {availableSpawnPoints[i].name}");
+                
             }
         }
     }

@@ -14,6 +14,9 @@ public class SceneTransitionManager : MonoBehaviour
     public GameObject transitionPanel;
     public float transitionDuration = 1f;
     
+    [Header("Scene 2 Access")]
+    public int minimumInspectionsRequired = 1;
+    
     private bool canTransitionToScene2 = false;
     
     void Awake()
@@ -31,7 +34,6 @@ public class SceneTransitionManager : MonoBehaviour
     
     void Start()
     {
-        // Determine current scene and set appropriate UI
         string currentScene = SceneManager.GetActiveScene().name;
         
         if (currentScene == scene1Name)
@@ -44,8 +46,10 @@ public class SceneTransitionManager : MonoBehaviour
             UIManager.Instance.SetSceneLabel("Scene 2: Warehouse Simulation");
             UIManager.Instance.ShowTimer(true);
             
-            // Start warehouse timer
-            TimerSystem.Instance.StartTimer(300f); // 5 minutes
+            if (TimerSystem.Instance != null)
+            {
+                TimerSystem.Instance.StartTimer(300f);
+            }
         }
     }
     
@@ -56,14 +60,23 @@ public class SceneTransitionManager : MonoBehaviour
     
     public void LoadScene2()
     {
-        if (canTransitionToScene2)
+        if (CanAccessScene2())
         {
             StartCoroutine(TransitionToScene(scene2Name));
         }
         else
         {
-            Debug.Log("Scene 2 not yet available. Complete all inspections first.");
+            int inspected = ProgressService.Instance != null ? ProgressService.Instance.GetInspectedCount() : 0;
+           
         }
+    }
+    
+    bool CanAccessScene2()
+    {
+        if (ProgressService.Instance == null) return false;
+        
+        int inspectedCount = ProgressService.Instance.GetInspectedCount();
+        return inspectedCount >= minimumInspectionsRequired;
     }
     
     public void LoadScene1()
@@ -73,17 +86,13 @@ public class SceneTransitionManager : MonoBehaviour
     
     IEnumerator TransitionToScene(string sceneName)
     {
-        // Show transition panel
         if (transitionPanel != null)
             transitionPanel.SetActive(true);
             
-        // Wait for transition
         yield return new WaitForSeconds(transitionDuration);
         
-        // Load new scene
         SceneManager.LoadScene(sceneName);
         
-        // Hide transition panel (will be handled by new scene)
         if (transitionPanel != null)
             transitionPanel.SetActive(false);
     }

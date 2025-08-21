@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM lom.xsd">
+
+  <general>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>warehouse_safety_training_v1.0</entry>
+    </identifier>
+    
+    <title>
+      <string language="en">Warehouse Safety Training Simulation</string>
+    </title>
+    
+    <language>en</language>
+    
+    <description>
+      <string language="en">Interactive 3D simulation training for warehouse safety procedures. Learners inspect safety equipment, collect items in a timed warehouse simulation, and complete a knowledge assessment.</string>
+    </description>
+    
+    <keyword>
+      <string language="en">warehouse safety</string>
+    </keyword>
+    <keyword>
+      <string language="en">interactive training</string>
+    </keyword>
+    <keyword>
+      <string language="en">safety equipment</string>
+    </keyword>
+    <keyword>
+      <string language="en">3D simulation</string>
+    </keyword>
+    
+    <structure>
+      <source>LOMv1.0</source>
+      <value>atomic</value>
+    </structure>
+    
+    <aggregationLevel>
+      <source>LOMv1.0</source>
+      <value>2</value>
+    </aggregationLevel>
+  </general>
+
+  <lifeCycle>
+    <version>
+      <string language="en">1.0</string>
+    </version>
+    
+    <status>
+      <source>LOMv1.0</source>
+      <value>final</value>
+    </status>
+    
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>author</value>
+      </role>
+      <entity>Training Development Team</entity>
+      <date>
+        <dateTime>2025-01-01</dateTime>
+      </date>
+    </contribute>
+  </lifeCycle>
+
+  <metaMetadata>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>warehouse_safety_metadata_v1.0</entry>
+    </identifier>
+    
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>creator</value>
+      </role>
+      <entity>SCORM Package Generator</entity>
+      <date>
+        <dateTime>2025-01-01</dateTime>
+      </date>
+    </contribute>
+    
+    <metadataSchema>LOMv1.0</metadataSchema>
+    <metadataSchema>SCORM_CAM_v1.3</metadataSchema>
+    <language>en</language>
+  </metaMetadata>
+
+  <technical>
+    <format>text/html</format>
+    <size>50000000</size>
+    
+    <location>index.html</location>
+    
+    <requirement>
+      <orComposite>
+        <type>
+          <source>LOMv1.0</source>
+          <value>browser</value>
+        </type>
+        <name>
+          <source>LOMv1.0</source>
+          <value>chrome</value>
+        </name>
+        <minimumVersion>80</minimumVersion>
+      </orComposite>
+    </requirement>
+    
+    <requirement>
+      <orComposite>
+        <type>
+          <source>LOMv1.0</source>
+          <value>browser</value>
+        </type>
+        <name>
+          <source>LOMv1.0</source>
+          <value>firefox</value>
+        </name>
+        <minimumVersion>75</minimumVersion>
+      </orComposite>
+    </requirement>
+    
+    <installationRemarks>
+      <string language="en">Requires WebGL-capable browser and internet connection</string>
+    </installationRemarks>
+    
+    <otherPlatformRequirements>
+      <string language="en">Minimum 4GB RAM, modern graphics card with WebGL support</string>
+    </otherPlatformRequirements>
+    
+    <duration>
+      <duration>PT30M</duration>
+    </duration>
+  </technical>
+
+  <educational>
+    <interactivityType>
+      <source>LOMv1.0</source>
+      <value>active</value>
+    </interactivityType>
+    
+    <learningResourceType>
+      <source>LOMv1.0</source>
+      <value>simulation</value>
+    </learningResourceType>
+    
+    <interactivityLevel>
+      <source>LOMv1.0</source>
+      <value>high</value>
+    </interactivityLevel>
+    
+    <semanticDensity>
+      <source>LOMv1.0</source>
+      <value>medium</value>
+    </semanticDensity>
+    
+    <intendedEndUserRole>
+      <source>LOMv1.0</source>
+      <value>learner</value>
+    </intendedEndUserRole>
+    
+    <context>
+      <source>LOMv1.0</source>
+      <value>training</value>
+    </context>
+    
+    <typicalAgeRange>
+      <string language="en">18-65</string>
+    </typicalAgeRange>
+    
+    <difficulty>
+      <source>LOMv1.0</source>
+      <value>medium</value>
+    </difficulty>
+    
+    <typicalLearningTime>
+      <duration>PT30M</duration>
+    </typicalLearningTime>
+    
+    <description>
+      <string language="en">Interactive training covering warehouse safety equipment inspection, item collection procedures, and safety knowledge assessment</string>
+    </description>
+    
+    <language>en</language>
+  </educational>
+
+  <rights>
+    <cost>
+      <source>LOMv1.0</source>
+      <value>no</value>
+    </cost>
+    
+    <copyrightAndOtherRestrictions>
+      <source>LOMv1.0</source>
+      <value>yes</value>
+    </copyrightAndOtherRestrictions>
+    
+    <description>
+      <string language="en">Copyright 2025 Training Development Team. All rights reserved.</string>
+    </description>
+  </rights>
+
+</lom>

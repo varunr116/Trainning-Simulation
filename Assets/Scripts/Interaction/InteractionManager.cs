@@ -1,4 +1,7 @@
+
+
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -27,6 +30,9 @@ public class InteractionManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            
+            // Subscribe to scene loaded event
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -36,15 +42,80 @@ public class InteractionManager : MonoBehaviour
     
     void Start()
     {
-        playerCamera = Camera.main;
-        playerController = FindObjectOfType<FirstPersonController>();
+        InitializeCameraReference();
+        InitializePlayerController();
         
         if (inspectionUI != null)
             inspectionUI.SetActive(false);
     }
     
+   
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+       
+        
+        // Reinitialize camera and player references for new scene
+        InitializeCameraReference();
+        InitializePlayerController();
+        
+        // Reset interaction state
+        ResetInteractionState();
+    }
+    
+    void InitializeCameraReference()
+    {
+        // Try multiple methods to find camera
+        playerCamera = Camera.main;
+        
+        if (playerCamera == null)
+        {
+            playerCamera = FindObjectOfType<Camera>();
+        }
+        
+        if (playerCamera == null)
+        {
+            // Look for camera in Player GameObject
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
+            {
+                playerCamera = player.GetComponentInChildren<Camera>();
+            }
+        }
+        
+       
+    }
+    
+    void InitializePlayerController()
+    {
+        playerController = FindObjectOfType<FirstPersonController>();
+        
+       
+    }
+    
+    void ResetInteractionState()
+    {
+        // Reset all interaction state when scene changes
+        currentlyInspecting = null;
+        hoveredItem = null;
+        isInspectionMode = false;
+        isRotating = false;
+        
+        if (inspectionUI != null)
+            inspectionUI.SetActive(false);
+    }
+    
+   
+    
     void Update()
     {
+        
+        if (playerCamera == null)
+        {
+            // Try to reacquire camera reference
+            InitializeCameraReference();
+            return; // Skip this frame if still no camera
+        }
+        
         if (isInspectionMode)
         {
             HandleInspectionInput();
@@ -57,7 +128,14 @@ public class InteractionManager : MonoBehaviour
     
     void HandleNormalInteraction()
     {
-        // Only do raycasting if cursor is locked (normal play mode)
+        
+        if (playerCamera == null)
+        {
+          
+            return;
+        }
+        
+        
         if (Cursor.lockState != CursorLockMode.Locked) return;
         
         // Cast ray from camera to detect interactable items
@@ -121,6 +199,8 @@ public class InteractionManager : MonoBehaviour
         }
     }
     
+   
+    
     public void OnItemHovered(InteractableItem item)
     {
         hoveredItem = item;
@@ -157,6 +237,13 @@ public class InteractionManager : MonoBehaviour
     
     void StartItemInspection(InteractableItem item)
     {
+        // SAFETY CHECK: Ensure camera exists before inspection
+        if (playerCamera == null)
+        {
+           
+            return;
+        }
+        
         currentlyInspecting = item;
         isInspectionMode = true;
         
@@ -188,7 +275,7 @@ public class InteractionManager : MonoBehaviour
             }
         }
         
-        Debug.Log($"Started inspecting: {item.itemData.displayName}");
+      
     }
     
     public void EndItemInspection()
@@ -217,11 +304,22 @@ public class InteractionManager : MonoBehaviour
             playerController.SetCursorLocked(true);
         }
         
-        Debug.Log("Ended item inspection");
+        
     }
     
     public bool IsInspectionMode()
     {
         return isInspectionMode;
+    }
+    
+   public InteractableItem GetCurrentlyInspecting()
+{
+    return currentlyInspecting;
+}
+    
+    void OnDestroy()
+    {
+        // Unsubscribe from events
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

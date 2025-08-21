@@ -20,7 +20,7 @@ public class ItemGlowController : MonoBehaviour
     public float pulseSpeed = 2f;
     public float pulseIntensityRange = 1f;
     
-    [Header("Outline Method")]
+    
     public OutlineMethod outlineMethod = OutlineMethod.DuplicateMesh;
     
     public enum OutlineMethod
@@ -30,7 +30,7 @@ public class ItemGlowController : MonoBehaviour
         URPRendererFeature
     }
     
-    // Internal variables - NO duplicate mesh detection here!
+    
     private List<Renderer> targetRenderers; // Gets data from InteractableItem
     private Vector3 originalScale;
     private List<GameObject> outlineObjects = new List<GameObject>();
@@ -71,14 +71,12 @@ public class ItemGlowController : MonoBehaviour
         urpGlowMaterial.SetColor(EmissionColor, glowColor * glowIntensity);
     }
     
-    // ============================================================================
-    // PUBLIC INTERFACE - Called by InteractableItem
-    // ============================================================================
+   
     
     public void SetTargetRenderers(List<Renderer> renderers)
     {
         targetRenderers = renderers;
-        Debug.Log($"ItemGlowController: Received {renderers.Count} renderers from InteractableItem");
+      
     }
     
     public void SetHovered(bool hovered)
@@ -123,7 +121,7 @@ public class ItemGlowController : MonoBehaviour
     {
         if (targetRenderers == null || targetRenderers.Count == 0)
         {
-            Debug.LogWarning($"No target renderers set for {name}! Call SetTargetRenderers() first.");
+            
             return;
         }
         
@@ -170,9 +168,7 @@ public class ItemGlowController : MonoBehaviour
         isGlowing = false;
     }
     
-    // ============================================================================
-    // OUTLINE CREATION - Uses provided renderer list
-    // ============================================================================
+  
     
     void CreateOutlinesForRenderers(GlowType glowType)
     {
@@ -213,7 +209,7 @@ public class ItemGlowController : MonoBehaviour
             outlineObjects.Add(outlineObject);
         }
         
-        Debug.Log($"Created {outlineObjects.Count} outline objects");
+       
     }
     
     void DestroyAllOutlines()
@@ -228,13 +224,10 @@ public class ItemGlowController : MonoBehaviour
     
     void SwapMaterialsForRenderers()
     {
-        // InteractableItem should handle this since it manages original materials
-        Debug.Log("Material swap method - handled by InteractableItem");
+        
     }
     
-    // ============================================================================
-    // PULSE EFFECT
-    // ============================================================================
+   
     
     IEnumerator PulseGlow()
     {
@@ -284,9 +277,7 @@ public class ItemGlowController : MonoBehaviour
         }
     }
     
-    // ============================================================================
-    // SCALE ANIMATION
-    // ============================================================================
+    
     
     void StartScale(float targetScale)
     {
@@ -314,9 +305,7 @@ public class ItemGlowController : MonoBehaviour
         scaleCoroutine = null;
     }
     
-    // ============================================================================
-    // CLEANUP
-    // ============================================================================
+   
     
     void OnDestroy()
     {

@@ -2032,6 +2032,7 @@ MonoBehaviour:
   inspectionDistance: 1.5
   inspectionOffset: {x: 0, y: 0, z: 0}
   lerpSpeed: 2
+  canBePickedUp: 1
   includeChildrenMeshes: 1
 --- !u!114 &8218567574136071866
 MonoBehaviour:

@@ -25,19 +25,7 @@ public class QuizManager : MonoBehaviour
     private int passingScore = 2;
     private bool quizCompleted = false;
     
-    [System.Serializable]
-    public class Question
-    {
-        public string questionText;
-        public string[] answers = new string[3];
-        public int correctAnswerIndex;
-    }
-    
-    [CreateAssetMenu(fileName = "QuizData", menuName = "Training/Quiz Data")]
-    public class QuizData : ScriptableObject
-    {
-        public Question[] questions = new Question[3];
-    }
+   
     
     void Awake()
     {
@@ -83,7 +71,7 @@ public class QuizManager : MonoBehaviour
     {
         if (quizData == null || quizData.questions.Length < totalQuestions)
         {
-            Debug.LogError("Quiz data not properly configured!");
+           
             return;
         }
         

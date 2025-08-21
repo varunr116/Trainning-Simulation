@@ -71,7 +71,7 @@ public class UIManager : MonoBehaviour
             else if (timeRemaining <= 60f)
                 timerText.color = Color.yellow;
             else
-                timerText.color = Color.white;
+                timerText.color = Color.black;
         }
     }
     

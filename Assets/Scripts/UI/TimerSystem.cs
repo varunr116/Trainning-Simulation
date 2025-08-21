@@ -64,6 +64,7 @@ public class TimerSystem : MonoBehaviour
         }
     }
     
+    
     public void StartTimer(float duration)
     {
         totalTime = duration;
@@ -72,9 +73,9 @@ public class TimerSystem : MonoBehaviour
         timeUp = false;
         hasWarned2Min = false;
         hasWarned30Sec = false;
-        
+
         Debug.Log($"Timer started: {duration} seconds");
-        
+
         // Show timer UI
         UIManager.Instance.ShowTimer(true);
     }
@@ -98,39 +99,67 @@ public class TimerSystem : MonoBehaviour
     }
     
     void CheckWarnings()
+{
+    // 2 minute warning
+    if (!hasWarned2Min && currentTime <= warningAt2Minutes)
     {
-        // 2 minute warning
-        if (!hasWarned2Min && currentTime <= warningAt2Minutes)
+        hasWarned2Min = true;
+        
+        // Play through Scene2AudioManager instead of directly
+        if (Scene2AudioManager.Instance != null)
         {
-            hasWarned2Min = true;
+            Scene2AudioManager.Instance.OnTimerWarning(2);
+        }
+        else
+        {
             AudioManager.Instance.PlayNarration(GetAudioClip("09_Timer_Warning_2Min"));
-            OnTimerWarning2Min?.Invoke();
         }
         
-        // 30 second warning
-        if (!hasWarned30Sec && currentTime <= warningAt30Seconds)
-        {
-            hasWarned30Sec = true;
-            AudioManager.Instance.PlayNarration(GetAudioClip("10_Timer_Warning_30Sec"));
-            AudioManager.Instance.PlaySFX("timer_warning");
-            OnTimerWarning30Sec?.Invoke();
-        }
+        OnTimerWarning2Min?.Invoke();
     }
     
-    void TimeUp()
+    // 30 second warning
+    if (!hasWarned30Sec && currentTime <= warningAt30Seconds)
     {
-        isRunning = false;
-        timeUp = true;
-        currentTime = 0;
+        hasWarned30Sec = true;
         
-        Debug.Log("Time's up!");
+        // Play through Scene2AudioManager
+        if (Scene2AudioManager.Instance != null)
+        {
+            Scene2AudioManager.Instance.OnTimerWarning(0); // 0 for 30 seconds
+        }
+        else
+        {
+            AudioManager.Instance.PlayNarration(GetAudioClip("10_Timer_Warning_30Sec"));
+        }
         
-        AudioManager.Instance.PlayNarration(GetAudioClip("12_Collection_Failure"));
-        OnTimeUp?.Invoke();
-        
-        // Proceed to quiz regardless
-        StartCoroutine(DelayedQuizStart());
+        AudioManager.Instance.PlaySFX("timer_warning");
+        OnTimerWarning30Sec?.Invoke();
     }
+}
+    
+   void TimeUp()
+{
+    isRunning = false;
+    timeUp = true;
+    currentTime = 0;
+    
+   
+    // Play through Scene2AudioManager
+    if (Scene2AudioManager.Instance != null)
+    {
+        Scene2AudioManager.Instance.OnTimeUp();
+    }
+    else
+    {
+        AudioManager.Instance.PlayNarration(GetAudioClip("12_Collection_Failure"));
+    }
+    
+    OnTimeUp?.Invoke();
+    
+    // Proceed to quiz regardless
+    StartCoroutine(DelayedQuizStart());
+}
     
     IEnumerator DelayedQuizStart()
     {

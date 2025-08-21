@@ -9,6 +9,8 @@ public class InspectionUIController : MonoBehaviour
     public TextMeshProUGUI instructionText;
     public Button backButton;
     
+    private InteractableItem currentItem;
+    
     void Start()
     {
         if (backButton != null)
@@ -16,53 +18,69 @@ public class InspectionUIController : MonoBehaviour
             backButton.onClick.AddListener(OnBackButtonClicked);
         }
         
-        // Set default instruction text
         if (instructionText != null)
         {
-            instructionText.text = "Drag mouse to rotate • Right-click or ESC to return";
+            instructionText.text = "Click and drag to rotate • Right-click or ESC to return";
         }
     }
     
     void OnEnable()
     {
-        // This runs every time the UI is shown
-        UpdateItemName();
+        UpdateItemInfo();
     }
     
-    void UpdateItemName()
+    void UpdateItemInfo()
     {
-        if (itemNameText != null)
+        if (InteractionManager.Instance != null)
         {
-            // Try to get the current item being inspected
-            if (InteractionManager.Instance != null)
+            currentItem = InteractionManager.Instance.GetCurrentlyInspecting();
+            
+            if (currentItem != null && currentItem.itemData != null)
             {
-                // For now, we'll set a default - this can be improved later
-                itemNameText.text = "Inspecting Item";
+                SetItemName(currentItem.itemData.displayName);
+                SetInstructionText(currentItem.itemData.description);
+            }
+            else
+            {
+                SetItemName("Unknown Item");
+                SetInstructionText("Click and drag to rotate");
             }
         }
     }
     
     void OnBackButtonClicked()
     {
-        // Play button sound
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlaySFX("button_click");
         }
         
-        // Tell InteractionManager to end inspection
         if (InteractionManager.Instance != null)
         {
             InteractionManager.Instance.EndItemInspection();
         }
     }
     
-    // Public method to set item name (called from InteractionManager)
     public void SetItemName(string itemName)
     {
         if (itemNameText != null)
         {
             itemNameText.text = $"Inspecting: {itemName}";
+        }
+    }
+    
+    public void SetInstructionText(string instruction)
+    {
+        if (instructionText != null)
+        {
+            if (string.IsNullOrEmpty(instruction))
+            {
+                instructionText.text = "Click and drag to rotate • Right-click or ESC to return";
+            }
+            else
+            {
+                instructionText.text = instruction;
+            }
         }
     }
 }

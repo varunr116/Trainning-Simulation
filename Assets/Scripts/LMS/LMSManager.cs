@@ -39,7 +39,7 @@ public class LMSManager : MonoBehaviour
     {
         if (!enableLMSReporting)
         {
-            Debug.Log("LMS reporting disabled");
+            
             return;
         }
         
@@ -53,7 +53,7 @@ public class LMSManager : MonoBehaviour
                 
             case LMSType.xAPI:
                 // Could implement xAPI client here
-                Debug.Log("xAPI not implemented yet");
+                
                 break;
                 
             case LMSType.Simulation:
@@ -68,7 +68,7 @@ public class LMSManager : MonoBehaviour
             
             if (isInitialized)
             {
-                Debug.Log($"LMS initialized: {lmsType}");
+               
                 
                 // Report initial progress
                 ReportProgress(0f);

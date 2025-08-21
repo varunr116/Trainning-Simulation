@@ -1,5 +1,4 @@
 using UnityEngine;
-
 using System.Collections.Generic;
 
 public class ProgressService : MonoBehaviour
@@ -33,9 +32,15 @@ public class ProgressService : MonoBehaviour
         if (!inspectedItems.Contains(itemID))
         {
             inspectedItems.Add(itemID);
+            
+            SCORMClient scorm = FindObjectOfType<SCORMClient>();
+            if (scorm != null)
+            {
+                scorm.TrackItemInspection(itemID);
+            }
+            
             UpdateProgress();
             
-            // Check if all items inspected
             if (inspectedItems.Count >= requiredItems.Count)
             {
                 OnAllItemsInspected();
@@ -48,13 +53,28 @@ public class ProgressService : MonoBehaviour
         if (!collectedItems.Contains(itemID))
         {
             collectedItems.Add(itemID);
+            
+            SCORMClient scorm = FindObjectOfType<SCORMClient>();
+            if (scorm != null)
+            {
+                scorm.TrackItemCollection(itemID);
+            }
+            
             UpdateProgress();
             
-            // Check if all items collected
             if (collectedItems.Count >= requiredItems.Count)
             {
                 OnAllItemsCollected();
             }
+        }
+    }
+    
+    public void RecordQuizAnswer(int questionIndex, int selectedAnswer, bool isCorrect)
+    {
+        SCORMClient scorm = FindObjectOfType<SCORMClient>();
+        if (scorm != null)
+        {
+            scorm.TrackQuizAnswer(questionIndex, selectedAnswer, isCorrect);
         }
     }
     
@@ -63,7 +83,7 @@ public class ProgressService : MonoBehaviour
         quizScore = score;
         UpdateProgress();
         
-        if (score >= 2) // Pass threshold
+        if (score >= 2)
         {
             OnCourseComplete();
         }
@@ -72,29 +92,54 @@ public class ProgressService : MonoBehaviour
     void OnAllItemsInspected()
     {
         scene1Complete = true;
-        Debug.Log("Scene 1 Complete - All items inspected!");
-        
-        // Enable scene transition
-        SceneTransitionManager.Instance.EnableScene2Transition();
+        if (SceneTransitionManager.Instance != null)
+        {
+            SceneTransitionManager.Instance.EnableScene2Transition();
+        }
     }
     
     void OnAllItemsCollected()
     {
         scene2Complete = true;
-        Debug.Log("Scene 2 Complete - All items collected!");
         
-        // Start quiz
-        QuizManager.Instance.StartQuiz();
+        if (TimerSystem.Instance != null)
+        {
+            TimerSystem.Instance.StopTimer();
+        }
+        
+        StartQuiz();
+    }
+    
+    void StartQuiz()
+    {
+        if (QuizManager.Instance != null)
+        {
+            QuizManager.Instance.StartQuiz();
+            return;
+        }
+        
+        QuizManager quizManager = FindObjectOfType<QuizManager>();
+        if (quizManager != null)
+        {
+            quizManager.StartQuiz();
+            return;
+        }
+        
+        Scene2UIConnector connector = FindObjectOfType<Scene2UIConnector>();
+        if (connector != null)
+        {
+            connector.StartQuizDirectly();
+            return;
+        }
     }
     
     void OnCourseComplete()
     {
-        Debug.Log("Course Complete!");
+        if (CertificateUI.Instance != null)
+        {
+            CertificateUI.Instance.ShowCertificate();
+        }
         
-        // Show certificate
-        CertificateUI.Instance.ShowCertificate();
-        
-        // Report to LMS
         if (LMSManager.Instance != null)
         {
             LMSManager.Instance.ReportCompletion();
@@ -105,10 +150,11 @@ public class ProgressService : MonoBehaviour
     {
         float totalProgress = CalculateProgress();
         
-        // Update progress bar
-        UIManager.Instance.UpdateProgressBar(totalProgress);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateProgressBar(totalProgress);
+        }
         
-        // Report to LMS
         if (LMSManager.Instance != null)
         {
             LMSManager.Instance.ReportProgress(totalProgress);
@@ -117,14 +163,13 @@ public class ProgressService : MonoBehaviour
     
     float CalculateProgress()
     {
-        float inspectionProgress = (float)inspectedItems.Count / requiredItems.Count * 0.4f; // 40%
-        float collectionProgress = (float)collectedItems.Count / requiredItems.Count * 0.4f; // 40%
-        float quizProgress = (float)quizScore / 3f * 0.2f; // 20%
+        float inspectionProgress = (float)inspectedItems.Count / requiredItems.Count * 0.4f;
+        float collectionProgress = (float)collectedItems.Count / requiredItems.Count * 0.4f;
+        float quizProgress = (float)quizScore / 3f * 0.2f;
         
         return inspectionProgress + collectionProgress + quizProgress;
     }
     
-    // Public getters
     public bool IsItemInspected(string itemID) => inspectedItems.Contains(itemID);
     public bool IsItemCollected(string itemID) => collectedItems.Contains(itemID);
     public bool IsScene1Complete() => scene1Complete;
