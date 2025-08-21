@@ -69,7 +69,7 @@ public class AudioManager : MonoBehaviour
             narrationSource.clip = clip;
             narrationSource.Play();
             
-            Debug.Log($"Playing narration: {clip.name}");
+            
         }
     }
     
@@ -108,7 +108,7 @@ public class AudioManager : MonoBehaviour
             case "wrong_answer": return wrongAnswerClip;
             case "timer_warning": return timerWarningClip;
             default: 
-                Debug.LogWarning($"SFX clip not found: {clipName}");
+              
                 return null;
         }
     }

@@ -15,27 +15,35 @@ public class FirstPersonController : MonoBehaviour
     private float verticalRotation = 0;
     private Vector3 moveDirection;
     
-    // Lock cursor on start
+    // Movement and input control
+    private bool movementEnabled = true;
     private bool cursorLocked = true;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         
-        // Lock cursor to center of screen
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
         // If no camera assigned, use main camera
         if (playerCamera == null)
             playerCamera = Camera.main;
+            
+        // Initialize cursor state
+        SetCursorLocked(true);
     }
 
     void Update()
     {
-        HandleMouseLook();
-        HandleMovement();
-        HandleCursorToggle();
+        if (movementEnabled)
+        {
+            HandleMouseLook();
+            HandleMovement();
+        }
+        
+        // Only handle ESC if movement is enabled (not in inspection)
+        if (movementEnabled)
+        {
+            HandleCursorToggle();
+        }
     }
 
     void HandleMouseLook()
@@ -83,7 +91,7 @@ public class FirstPersonController : MonoBehaviour
 
     void HandleCursorToggle()
     {
-        // Press ESC to toggle cursor lock (useful for testing)
+        // Press ESC to toggle cursor lock (only when movement enabled)
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleCursorLock();
@@ -92,7 +100,12 @@ public class FirstPersonController : MonoBehaviour
 
     public void ToggleCursorLock()
     {
-        cursorLocked = !cursorLocked;
+        SetCursorLocked(!cursorLocked);
+    }
+    
+    public void SetCursorLocked(bool locked)
+    {
+        cursorLocked = locked;
         
         if (cursorLocked)
         {
@@ -104,11 +117,19 @@ public class FirstPersonController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        
+        Debug.Log($"Cursor locked: {cursorLocked}");
     }
 
-    // Public method to enable/disable movement (useful for UI interactions)
+    // Public method to enable/disable movement (called from InteractionManager)
     public void SetMovementEnabled(bool enabled)
     {
-        this.enabled = enabled;
+        movementEnabled = enabled;
+        Debug.Log($"Player movement: {(enabled ? "ENABLED" : "DISABLED")}");
+    }
+    
+    public bool IsMovementEnabled()
+    {
+        return movementEnabled;
     }
 }
