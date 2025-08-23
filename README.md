@@ -30,7 +30,6 @@ Unity-based interactive training application with SCORM integration for warehous
 
 ## SCORM Implementation Summary
 
-I implemented SCORM integration from scratch using online resources as I had no prior experience with SCORM standards.
 
 ### What Was Built
 - **SCORMClient.cs**: Handles Unity-LMS communication
