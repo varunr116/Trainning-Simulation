@@ -53,6 +53,8 @@ Unity-based interactive training application with SCORM integration for warehous
 - Package imports correctly and tracks progress
 - Works with standard LMS systems
 
+Link for testing WebGL - https://app.cloud.scorm.com/sc/InvitationConfirmEmail?publicInvitationId=5b095505-5364-48cc-b52e-9247864f272d
+
 ## Git Workflow
 
 This was a solo project with standard Git practices:
